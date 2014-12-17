@@ -13,7 +13,10 @@ Template.prettyLabel.helpers({
   }
   , activeClass: function () {
     var tmpl = Template.instance();
-    return /*tmpl.elementIsActive.get() || */tmpl.elementHasData.get() ?
+    return /*tmpl.elementIsActive.get() || */(
+        this.value ||
+        tmpl.elementHasData.get()
+      ) ?
       'active' :
       '';
   }
@@ -38,7 +41,10 @@ var handlers = {
   , 'blur': function (e, tmpl) {
     tmpl.elementIsActive.set(false);
   }
-  , 'keydown': function (e, tmpl) {
+  , 'keyup': function (e, tmpl) {
+    tmpl.elementHasData.set(!!e.currentTarget.value);
+  }
+  , 'change': function (e, tmpl) {
     tmpl.elementHasData.set(!!e.currentTarget.value);
   }
 };
