@@ -13,7 +13,7 @@ Template.prettyLabel.helpers({
   }
   , activeClass: function () {
     var tmpl = Template.instance();
-    return /*tmpl.elementIsActive.get() || */(
+    return tmpl.elementIsActive.get() || (
         this.value ||
         tmpl.elementHasData.get()
       ) ?
@@ -32,10 +32,22 @@ Template.prettyLabel.helpers({
     var tmpl = Template.instance();
     return this.label || tmpl.elementVars.get().placeholder;
   }
+  , labelPlaceholder: function () {
+    var tmpl = Template.instance();
+    var initialPlaceholder = tmpl.elementVars.get().placeholder;
+
+    if (this.placeholder) return this.placeholder;
+    if (!initialPlaceholder || this.label === initialPlaceholder) {
+      return this.label;
+    }
+
+    return '';
+  }
 });
 
 var handlers = {
   'focus': function (e, tmpl) {
+    if (e.currentTarget.tagName === 'SELECT' || this.ignoreFocus) return;
     tmpl.elementIsActive.set(true);
   }
   , 'blur': function (e, tmpl) {
@@ -58,6 +70,7 @@ Template.prettyLabel.events(events);
 
 Template.prettyLabel.rendered = function () {
   var input = this.find(selectors.join(', '));
+  var self = this;
   if (input) {
     this.elementVars.set({
       'name': input.name
@@ -65,6 +78,15 @@ Template.prettyLabel.rendered = function () {
     });
     this.elementHasData.set(!!input.value);
   }
+  this.autorun(function () {
+    var input = self.find(selectors.join(', '));
+    var placeholder = self.view.lookup('labelPlaceholder')();
+    var label = self.view.lookup('labelText')();
+    var activeClass = self.view.lookup('activeClass')();
+    if (placeholder && input) {
+      input.placeholder = !!activeClass ? "" : placeholder;
+    }
+  });
 };
 
 Template.prettyLabel.created = function () {
