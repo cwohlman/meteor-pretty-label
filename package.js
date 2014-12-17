@@ -1,7 +1,7 @@
 Package.describe({
   name: 'cwohlman:pretty-label',
   summary: ' /* Fill me in! */ ',
-  version: "0.2.0",
+  version: "0.2.1",
   git: ' /* Fill me in! */ '
 });
 

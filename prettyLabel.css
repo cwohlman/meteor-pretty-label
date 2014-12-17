@@ -38,3 +38,7 @@
   font-weight: normal;
   color: gray;
 }
+
+.has-feedback label.pretty-label-wrapper ~ .form-control-feedback {
+  top: 0;
+}
