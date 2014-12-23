@@ -24,6 +24,9 @@
 
 .pretty-label {
   float: left;
+  /* the relative positioning is necessary to keep the label on top of
+     inline elements. */
+  position: relative;
   max-width: 100%;
   max-width: calc(100% - 15px);
   text-overflow: ellipsis;
